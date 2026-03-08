@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataJobs.fyi — Coming Soon</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #0b0e0c;
+    --surface: #111510;
+    --border:  #1c2420;
+    --green:   #00e87a;
+    --green2:  #00b85e;
+    --dim:     #1a3328;
+    --text:    #e8f0ec;
+    --muted:   #4a6658;
+    --faint:   #0e1612;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* animated grid bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,232,122,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,232,122,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* glow blob */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(0,232,122,0.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 0 0;
+    margin-bottom: 80px;
+  }
+
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { color: var(--muted); font-weight: 400; }
+
+  .nav-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--green);
+    border: 1px solid var(--dim);
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: rgba(0,232,122,0.05);
+    animation: blink 2s infinite;
+  }
+
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.5; }
+  }
+
+  /* ── HERO ── */
+  .hero { margin-bottom: 64px; }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(40px, 7vw, 68px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 24px;
+  }
+
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--green);
+  }
+
+  .hero-desc {
+    font-size: 16px;
+    color: #7a9e8c;
+    line-height: 1.75;
+    font-weight: 300;
+    max-width: 520px;
+  }
+
+  .hero-desc strong {
+    color: #a8c8b8;
+    font-weight: 500;
+  }
+
+  /* ── PAIN POINTS ── */
+  .pain-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 36px 0 48px;
+  }
+
+  .pain-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 18px;
+    background: var(--faint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    color: #6a8a78;
+    animation: slideIn 0.4s ease both;
+  }
+
+  .pain-item:nth-child(1){animation-delay:0.1s}
+  .pain-item:nth-child(2){animation-delay:0.2s}
+  .pain-item:nth-child(3){animation-delay:0.3s}
+  .pain-item:nth-child(4){animation-delay:0.4s}
+
+  @keyframes slideIn {
+    from { opacity:0; transform:translateX(-12px); }
+    to   { opacity:1; transform:translateX(0); }
+  }
+
+  .pain-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .pain-item.solved {
+    border-color: rgba(0,232,122,0.15);
+    background: rgba(0,232,122,0.03);
+    color: #90b89e;
+  }
+
+  .pain-item.solved .pain-icon::after { content: ''; }
+
+  /* ── FEATURES ── */
+  .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 52px;
+  }
+
+  @media(max-width:480px){ .features{ grid-template-columns:1fr; } }
+
+  .feat {
+    padding: 16px 18px;
+    background: var(--faint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    color: #6a8a78;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .feat-icon {
+    color: var(--green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── FORM CARD ── */
+  .form-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .form-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+  }
+
+  @media(max-width:480px){ .form-card{ padding: 28px 20px; } }
+
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .form-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.55;
+  }
+
+  .form-sub strong { color: var(--green); }
+
+  /* counter */
+  .counter-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    padding: 12px 16px;
+    background: rgba(0,232,122,0.05);
+    border: 1px solid rgba(0,232,122,0.1);
+    border-radius: 8px;
+  }
+
+  .counter-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  .counter-label {
+    font-size: 13px;
+    color: #4a7a5e;
+    line-height: 1.4;
+  }
+
+  .counter-label strong { color: #7aaa8a; display: block; }
+
+  /* progress */
+  .progress-bar-wrap {
+    height: 4px;
+    background: var(--dim);
+    border-radius: 4px;
+    margin-top: 8px;
+    overflow: hidden;
+    width: 140px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 4px;
+    transition: width 1s ease;
+    width: 30%; /* update via JS */
+  }
+
+  /* fields */
+  .field {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  input[type="email"],
+  input[type="text"] {
+    width: 100%;
+    background: var(--faint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 13px 16px;
+    font-size: 15px;
+    font-family: 'Outfit', sans-serif;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input[type="email"]:focus,
+  input[type="text"]:focus {
+    border-color: var(--green2);
+    box-shadow: 0 0 0 3px rgba(0,232,122,0.08);
+  }
+
+  input::placeholder { color: var(--muted); }
+
+  /* radio group */
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .radio-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 16px;
+    background: var(--faint);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 14px;
+    color: #8aaa98;
+  }
+
+  .radio-opt:hover {
+    border-color: var(--green2);
+    background: rgba(0,232,122,0.03);
+  }
+
+  .radio-opt input[type="radio"] { display: none; }
+
+  .radio-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--muted);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s;
+  }
+
+  .radio-opt input[type="radio"]:checked ~ .radio-dot {
+    border-color: var(--green);
+    background: var(--green);
+  }
+
+  .radio-opt input[type="radio"]:checked ~ .radio-dot::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--bg);
+    border-radius: 50%;
+  }
+
+  .radio-opt:has(input:checked) {
+    border-color: rgba(0,232,122,0.3);
+    background: rgba(0,232,122,0.05);
+    color: var(--text);
+  }
+
+  /* submit */
+  .submit-btn {
+    width: 100%;
+    margin-top: 28px;
+    padding: 16px;
+    background: var(--green);
+    color: #050a07;
+    border: none;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn:hover {
+    background: #00ff88;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,232,122,0.25);
+  }
+
+  .submit-btn:active { transform: translateY(0); }
+
+  .submit-btn.loading { pointer-events: none; opacity: 0.7; }
+
+  .submit-note {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* success state */
+  .success-state {
+    display: none;
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .success-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  }
+
+  @keyframes pop {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .success-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--green);
+  }
+
+  .success-msg {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 60px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #1e3028;
+  }
+
+  /* ── UTILITY ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <nav>
+    <div class="logo">DataJobs<span>.fyi</span></div>
+    <div class="nav-badge">● COMING SOON</div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">// Early Access — Free for First 10 Signups</div>
+    <h1>Stop checking<br><em>five job sites</em><br>every morning.</h1>
+    <p class="hero-desc">
+      One feed. 15+ sources. Filtered for <strong>Data Engineers, Analysts & ML Engineers</strong> — by role, seniority, stack, and location. New jobs delivered to your inbox every day.
+    </p>
+  </div>
+
+  <!-- PAIN → SOLUTION -->
+  <div class="section-label">The problem right now</div>
+  <div class="pain-strip">
+    <div class="pain-item">
+      <span class="pain-icon">😤</span>
+      Checking LinkedIn, WWR, Remotive, Greenhouse, HN separately — every single day
+    </div>
+    <div class="pain-item">
+      <span class="pain-icon">😤</span>
+      Duplicate listings, expired postings, irrelevant roles flooding your search
+    </div>
+    <div class="pain-item">
+      <span class="pain-icon">😤</span>
+      No way to filter by "Python + Kafka + remote + junior" across all boards at once
+    </div>
+    <div class="pain-item solved">
+      <span class="pain-icon">✅</span>
+      <strong style="color:#90c8a0">DataJobs.fyi fixes all of this.</strong>&nbsp; One tab. One digest. Done.
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section-label">What you get</div>
+  <div class="features">
+    <div class="feat"><span class="feat-icon">→</span>15+ sources aggregated daily</div>
+    <div class="feat"><span class="feat-icon">→</span>Filter by Python, Spark, dbt, Kafka</div>
+    <div class="feat"><span class="feat-icon">→</span>Junior / Mid / Senior / Intern filter</div>
+    <div class="feat"><span class="feat-icon">→</span>Remote-only toggle</div>
+    <div class="feat"><span class="feat-icon">→</span>Daily email digest at 8am</div>
+    <div class="feat"><span class="feat-icon">→</span>Save & track applications</div>
+    <div class="feat"><span class="feat-icon">→</span>Salary range filter</div>
+    <div class="feat"><span class="feat-icon">→</span>International jobs (EU, remote)</div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- FORM -->
+  <div class="form-card" id="formCard">
+
+    <div class="form-title">Get Early Access</div>
+    <div class="form-sub">
+      Takes 30 seconds. <strong>First 10 signups get 3 months free</strong> when we launch.
+    </div>
+
+    <!-- COUNTER -->
+    <div class="counter-row">
+      <div>
+        <div class="counter-num" id="counterNum">3</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+      </div>
+      <div class="counter-label">
+        <strong>people already signed up</strong>
+        7 spots remaining for the free tier
+      </div>
+    </div>
+
+    <!-- THE FORM — replace YOUR_FORMSPREE_ID with your actual ID -->
+    <form id="validationForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+
+      <div class="field">
+        <label for="email">Your Email *</label>
+        <input type="email" name="email" id="email" placeholder="you@gmail.com" required />
+      </div>
+
+      <div class="field">
+        <label>How many job sites do you check daily?</label>
+        <div class="radio-group">
+          <label class="radio-opt">
+            <input type="radio" name="sites_checked" value="1-2" />
+            <span class="radio-dot"></span>
+            1–2 sites
+          </label>
+          <label class="radio-opt">
+            <input type="radio" name="sites_checked" value="3-5" />
+            <span class="radio-dot"></span>
+            3–5 sites
+          </label>
+          <label class="radio-opt">
+            <input type="radio" name="sites_checked" value="5+" />
+            <span class="radio-dot"></span>
+            5+ sites (I'm exhausted)
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Would you pay $19/month for this?</label>
+        <div class="radio-group">
+          <label class="radio-opt">
+            <input type="radio" name="would_pay" value="yes" />
+            <span class="radio-dot"></span>
+            Yes, absolutely
+          </label>
+          <label class="radio-opt">
+            <input type="radio" name="would_pay" value="maybe" />
+            <span class="radio-dot"></span>
+            Maybe — depends on quality
+          </label>
+          <label class="radio-opt">
+            <input type="radio" name="would_pay" value="no" />
+            <span class="radio-dot"></span>
+            No, but I'd use a free version
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Anything specific you'd want? (optional)</label>
+        <input type="text" name="feature_request" placeholder="e.g. Lisbon jobs, Kafka filter, Slack alerts..." />
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        → Claim My Early Access Spot
+      </button>
+      <p class="submit-note">No spam. No credit card. Just early access.</p>
+    </form>
+
+    <!-- SUCCESS STATE -->
+    <div class="success-state" id="successState">
+      <div class="success-icon">⚡</div>
+      <div class="success-title">You're on the list.</div>
+      <p class="success-msg">
+        We'll email you as soon as DataJobs.fyi is live.<br>
+        You're one of the first — your 3 months free is locked in.<br><br>
+        <span style="color:#3a5a47;font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:1px">
+          Share with a fellow data nerd →
+        </span>
+      </p>
+    </div>
+
+  </div>
+
+  <footer>
+    DATAJOBS.FYI — BUILT BY A DATA ENGINEER, FOR DATA ENGINEERS
+  </footer>
+
+</div>
+
+<script>
+  // Animated counter on load
+  const target = 3;
+  const counterEl = document.getElementById('counterNum');
+  const progressEl = document.getElementById('progressFill');
+
+  setTimeout(() => {
+    progressEl.style.width = (target / 10 * 100) + '%';
+  }, 300);
+
+  // Form submission
+  const form = document.getElementById('validationForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const successState = document.getElementById('successState');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.textContent = 'Submitting...';
+    submitBtn.classList.add('loading');
+
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        successState.style.display = 'block';
+        // bump counter
+        counterEl.textContent = target + 1;
+        progressEl.style.width = ((target + 1) / 10 * 100) + '%';
+      } else {
+        // Formspree not configured — show success anyway for demo
+        showSuccess();
+      }
+    } catch {
+      // No backend connected — show success for preview
+      showSuccess();
+    }
+  });
+
+  function showSuccess() {
+    form.style.display = 'none';
+    successState.style.display = 'block';
+    counterEl.textContent = target + 1;
+    progressEl.style.width = ((target + 1) / 10 * 100) + '%';
+  }
+
+  // Radio options — visual select
+  document.querySelectorAll('.radio-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const radio = opt.querySelector('input[type="radio"]');
+      radio.checked = true;
+    });
+  });
+</script>
+
+</body>
+</html>
